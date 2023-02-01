@@ -1,3 +1,39 @@
+## Setting up DigitalOcean
+
+```sh
+> brew install doctl
+> doctl auth init <paste digital ocean access token>
+```
+
+## Setting up SSH
+
+```sh
+> ssh-keygen -t ed25519 -m PEM -f ~/.ssh/airbyte-srv-cfdbua4gqg485s0479rg
+```
+
+## Setting up Airbyte
+See: <https://docs.airbyte.com/deploying-airbyte/on-digitalocean-droplet>
+
+First, SSH into the Digital Ocean Droplet:
+
+```sh
+> doctl compute ssh <droplet instance name from Digital Ocean Website>
+> # Logged into droplet
+> sudo apt update
+> sudo apt install apt-transport-https ca-certificates curl software-properties-common
+> curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+> sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
+> sudo apt install docker-ce
+> sudo systemctl status docker
+> sudo usermod -aG docker ${USER}
+> su - ${USER}
+> sudo apt install docker-compose-plugin
+> docker compose version
+> mkdir airbyte && cd airbyte
+> wget https://raw.githubusercontent.com/airbytehq/airbyte/master/{.env,flags.yml,docker-compose.yaml}
+> docker compose up -d
+```
+
 <p align="center">
   <a href="https://airbyte.com"><img src="https://assets.website-files.com/605e01bc25f7e19a82e74788/624d9c4a375a55100be6b257_Airbyte_logo_color_dark.svg" alt="Airbyte"></a>
 </p>
@@ -31,8 +67,9 @@
 We believe that only an **open-source** solution to data movement can cover the **long tail of data sources** while empowering data engineers to **customize existing connectors**. Our ultimate vision is to help you move data from any source to any destination. Airbyte already provides [300+ connectors](https://docs.airbyte.com/integrations/) for popular APIs, databases, data warehouses and data lakes.
 
 Airbyte connectors can be implemented in any language and take the form of a Docker image that follows the [Airbyte specification](https://docs.airbyte.com/understanding-airbyte/airbyte-protocol/). You can create new connectors very fast with:
- - The [low-code Connector Development Kit](https://docs.airbyte.com/connector-development/config-based/low-code-cdk-overview) (CDK) for API connectors ([demo](https://www.youtube.com/watch?v=i7VSL2bDvmw))
- - The [Python CDK](https://docs.airbyte.com/connector-development/cdk-python/) ([tutorial](https://docs.airbyte.com/connector-development/tutorials/cdk-speedrun))
+
+- The [low-code Connector Development Kit](https://docs.airbyte.com/connector-development/config-based/low-code-cdk-overview) (CDK) for API connectors ([demo](https://www.youtube.com/watch?v=i7VSL2bDvmw))
+- The [Python CDK](https://docs.airbyte.com/connector-development/cdk-python/) ([tutorial](https://docs.airbyte.com/connector-development/tutorials/cdk-speedrun))
 
 Airbyte has a built-in scheduler and uses [Temporal](https://airbyte.com/blog/scale-workflow-orchestration-with-temporal) to orchestrate jobs and ensure reliability at scale. Airbyte leverages [dbt](https://www.youtube.com/watch?v=saXwh6SpeHA) to normalize extracted data and can trigger custom transformations in SQL and dbt. You can also orchestrate Airbyte syncs with [Airflow](https://docs.airbyte.com/operator-guides/using-the-airflow-airbyte-operator), [Prefect](https://docs.airbyte.com/operator-guides/using-prefect-task) or [Dagster](https://docs.airbyte.com/operator-guides/using-dagster-integration).
 
